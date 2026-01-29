@@ -1,0 +1,24 @@
+name: Sync OpenMetadata Images to Aliyun
+
+on:
+  workflow_dispatch: # 允许手动触发
+  push:
+    branches: [ "main" ]
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Login to Aliyun Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ secrets.ALIYUN_REGISTRY }}
+          username: ${{ secrets.ALIYUN_USERNAME }}
+          password: ${{ secrets.ALIYUN_PASSWORD }}
+
+      - name: Sync Images using Skopeo
+        run: |
+          skopeo copy docker://openmetadata/db:1.3.2 docker://${{ secrets.ALIYUN_REGISTRY }}/${{ secrets.ALIYUN_NAMESPACE }}/openmetadata-db:1.3.2
+          skopeo copy docker://openmetadata/elasticsearch:1.3.2 docker://${{ secrets.ALIYUN_REGISTRY }}/${{ secrets.ALIYUN_NAMESPACE }}/openmetadata-elasticsearch:1.3.2
+          skopeo copy docker://openmetadata/server:1.3.2 docker://${{ secrets.ALIYUN_REGISTRY }}/${{ secrets.ALIYUN_NAMESPACE }}/openmetadata-server:1.3.2
+          skopeo copy docker://openmetadata/ingestion:1.3.2 docker://${{ secrets.ALIYUN_REGISTRY }}/${{ secrets.ALIYUN_NAMESPACE }}/openmetadata-ingestion:1.3.2
