@@ -19,9 +19,7 @@ jobs:
       - name: Sync Image - db
         run: skopeo copy --retry-times 3 docker://openmetadata/db:1.3.2 docker://${{ secrets.ALIYUN_REGISTRY }}/${{ secrets.ALIYUN_NAMESPACE }}/openmetadata-db:1.3.2
 
-      - name: Sync Image - elasticsearch
-        run: skopeo copy --retry-times 3 docker://openmetadata/elasticsearch:1.3.2 docker://${{ secrets.ALIYUN_REGISTRY }}/${{ secrets.ALIYUN_NAMESPACE }}/openmetadata-elasticsearch:1.3.2
-
+    
       - name: Sync Image - server
         run: skopeo copy --retry-times 3 docker://openmetadata/server:1.3.2 docker://${{ secrets.ALIYUN_REGISTRY }}/${{ secrets.ALIYUN_NAMESPACE }}/openmetadata-server:1.3.2
 
